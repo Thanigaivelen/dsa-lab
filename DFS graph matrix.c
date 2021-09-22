@@ -1,31 +1,40 @@
 // Iplementation of graph using matrix
-#include<stdio.h>
+#include <stdio.h> 
+
+int dfs(int x,int size);
+int graph[10][10],visited[10];
 int main()
 {
- int a[100][100],i,j,n,k;
- printf("enter size of graph : ");
- scanf("%d",&n);
- for(i=0;i<n;i++)
- {
-   for(j=0;j<n;j++)
-   {
-     printf("do u want to map : ");
-     scanf("%d",&k);
-     if(k==1)
-     {
-       a[i][j]=1;
-     }
-     else
-     a[i][j]=0;
-   }
- }
- for(i=0;i<n;i++)
- {
-   for(j=0;j<n;j++)
-   {
-     if(a[i][j]==1)
-     printf("mapped index are %d,%d \n",i,j);
-   }
- }
- return 0;
+  int i,j,size;
+  printf("enter the size less then 10 \t");
+  scanf("%d",&size);
+  for(i=0;i<size;i++)
+  {
+    for(j=0;j<size;j++)
+      scanf("%d",&graph[i][j]);
+    visited[i]=0;
+
+  }
+  printf("\nMatrix \n");
+  for(i=0;i<size;i++)
+  {
+    printf("\n");
+    for(j=0;j<size;j++)
+      printf(" %d ",graph[i][j]);
+  }
+  printf("\n\n");
+  dfs(0,size);
+
+}
+int dfs(int x,int size)
+{
+  int j;
+  visited[x]=1;
+  printf("\n%d",x);
+  for(j=0;j<size;j++)
+  {
+    if(visited[j]!=1&&graph[x][j]==1)
+      dfs(j,size);
+  }
+   return 0;
 }
