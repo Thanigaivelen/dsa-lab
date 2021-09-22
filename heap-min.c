@@ -1,5 +1,3 @@
-// Max-Heap data structure in C
-
 #include <stdio.h>
 int size = 0;
 void swap(int *a, int *b)
@@ -63,6 +61,7 @@ void deleteRoot(int array[], int num)
     heapify(array, size, i);
   }
 }
+
 void printArray(int array[], int size)
 {
   for (int i = 0; i < size; ++i)
@@ -72,12 +71,6 @@ void printArray(int array[], int size)
 int main()
 {
   int array[10], n, data, choice = 0;
-
-//   insert(array, 3);
-//   insert(array, 4);
-//   insert(array, 9);
-//   insert(array, 5);
-//   insert(array, 2);
 
   printf("enter size of heap: ");
   scanf("%d", &n);
@@ -102,8 +95,8 @@ int main()
 				insert(array, data);
 				break;
 			case 2:
-				printf("enter data to be deleted: ");
-    		scanf("%d", &data);
+				data = array[0];
+				printf("element deleted: %d\n", data);
 				deleteRoot(array, data);
 				break;
 			case 3:
