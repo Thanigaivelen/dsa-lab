@@ -73,14 +73,14 @@ void main()
 
  case 2:
      for (i=0;i<tsize;i++)
-  hash[i]=-1 ;
+  hash[i]=0 ;
 
      for(k=0;k<n;k++)
      {
   j=1;
   key=arr[k] ;
   i = hasht(key);
-  while (hash[i]!=-1)
+  while (hash[i]!=0)
   {
       i = rehashq(i,j);
       j++ ;
