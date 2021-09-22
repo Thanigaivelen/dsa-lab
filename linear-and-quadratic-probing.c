@@ -1,101 +1,106 @@
 #include <stdio.h>
-#include <conio.h>
-int tsize;
+#include <stdlib.h>
 
-int hasht(int key)
-{
- int i ;
- i = key%tsize ;
- return i;
+int *arr;
+int capacity = 10;
+int size = 0;
+
+void initArray() {
+	int loadfactor = size/capacity;
+	if (loadfactor >= 0.5) {
+		capacity = (capacity*2 >= 10) ? capacity * 2 : 10;
+	}
+	arr = malloc(capacity * sizeof(int));
 }
 
-//-------LINEAR PROBING-------
-int rehashl(int key)
+int hashFunction(int key)
 {
- int i ;
- i = (key+1)%tsize ;
- return i ;
+  return (key % capacity);
 }
 
-//-------QUADRATIC PROBING-------
-int rehashq(int key, int j)
-{
- int i ;
- i = (key+(j*j))%tsize ;
- return i ;
+void linearProbing(int key) {
+	int index = hashFunction(key);
+	while(arr[index] != -1) {
+		index += 1;
+		index = (index >= capacity) ? index % capacity : index;
+	}
+	arr[index] = key;
+	size++;
 }
 
-void main()
+void quadraticProbing(int key)
 {
-    int key,arr[20],hash[20],i,n,s,op,j,k ;
-    //clrscr() ;
-    printf ("Enter the size of the hash table:  ");
-    scanf ("%d",&tsize);
+	int index = hashFunction(key), count = 0;
+	int temp = index;
+	while(arr[index] != -1) {
+		count++;
+		index = temp + count*count;
+		index = (index >= capacity) ? index % capacity : index;
+	}
+	arr[index] = key;
+	size++;
+}
 
-    printf ("\nEnter the number of elements: ");
-    scanf ("%d",&n);
 
-    for (i=0;i<tsize;i++)
- hash[i]=-1 ;
+void display()
+{
+	for(int i = 0; i < capacity; i++) {
+		if (arr[i] == -1) {
+			printf("element at %d: no data\n", i);
+			continue;
+		}
+		printf("element at %d: %d\n", i, arr[i]);
+	}
+}
 
-    printf ("Enter Elements: ");
-    for (i=0;i<n;i++)
-    {
- scanf("%d",&arr[i]);
-    }
+int main()
+{
+	int key, choice = 0, probing = 0;
+	printf("enter size: ");
+	scanf("%d", &size);
+	initArray();
+	
+	for (int i = 0; i < capacity; i++) {
+		arr[i] = -1;
+	}
 
-    do
-    {
- printf("\n\n1.Linear Probing\n2.Quadratic Probing \n3.Exit \nEnter your option: ");
- scanf("%d",&op);
- switch(op)
- {
- case 1:
-     for (i=0;i<tsize;i++)
-     hash[i]=0 ;
+	printf("enter 1 for linear probing / 2 for quadratic probing: ");
+	scanf("%d", &probing);
+	printf("\n");
 
-     for(k=0;k<n;k++)
-     {
-  key=arr[k] ;
-  i = hasht(key);
-  while (hash[i]!=0)
-  {
-      i = rehashl(i);
-  }
-  hash[i]=key ;
-     }
-     printf("\nThe elements in the array are: ");
-     for (i=0;i<tsize;i++)
-     {
-  printf("\n  Element at position %d: %d",i,hash[i]);
-     }
-     break ;
+	int local = size;
 
- case 2:
-     for (i=0;i<tsize;i++)
-  hash[i]=0 ;
+	if (probing == 1) {
+		for (int i = 0; i < local; i++) {
+			printf("enter data %d: ", i);
+			scanf("%d", &key);
+			linearProbing(key);
+		}
+	}
+	else if (probing == 2) {
+		for (int i = 0; i < local; i++) {
+			printf("enter data: ");
+			scanf("%d", &key);
+			quadraticProbing(key);
+		}
+	}
 
-     for(k=0;k<n;k++)
-     {
-  j=1;
-  key=arr[k] ;
-  i = hasht(key);
-  while (hash[i]!=0)
-  {
-      i = rehashq(i,j);
-      j++ ;
-  }
-  hash[i]=key ;
-     }
-     printf("\nThe elements in the array are: ");
-     for (i=0;i<tsize;i++)
-     {
-  printf("\n Element at position %d: %d",i,hash[i]);
-     }
-     break ;
+	while (choice != 3) {
+		printf("press insert(1) / display(2) / quit(3): ");
+		scanf("%d", &choice);
 
- }
-    }while(op!=3);
+		if (choice == 1) {
+			printf("enter data: ");
+			scanf("%d", &key);
+			if (probing == 1) 
+				linearProbing(key);
+			else if (probing == 2)
+				quadraticProbing(key);
+		}
+		else if (choice == 2) 
+			display();
+		else if (choice == 3)
+			printf("quitting the program\n");
+	}
 
-    getch() ;
 }
