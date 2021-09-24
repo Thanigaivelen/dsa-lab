@@ -1,98 +1,84 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-void enqueue(int *f, int *r, int *arr);
-void dequeue(int *f, int *r, int *arr);
-void display(int *f, int *r, int *arr);
+#define MAX 50
 
-int main() {
-	int choice, front = -1, rear = -1;
-	int arr[50];
+void insert();
+void delete();
+void display();
+int queue_array[MAX];
+int rear = - 1;
+int front = - 1;
+int main()
+{
+    int choice;
+    while (1)
+    {
+        printf("1.Enqueue \n");
+        printf("2.Dequeue \n");
+        printf("3.Display \n");
+        printf("4.Quit \n");
+        printf("Enter your choice : ");
+        scanf("%d", &choice);
+        switch (choice)
+        {
+            case 1:
+            enqueue();
+            break;
+            case 2:
+            delete();
+            break;
+            case 3:
+            display();
+            break;
+            case 4:
+            exit(1);
+            default:
+            printf("Wrong choice \n");
+        } /* End of switch */
+    } /* End of while */
+} /* End of main() */
 
-	while(choice != 4) {
-		printf("\nenqueue(1)/ dequeue(2)/ display(3) / quit(4): ");
-		scanf("%d", &choice);
+void enqueue()
+{
+    int add_item;
+    if (rear == MAX - 1)
+    printf("Queue Overflow \n");
+    else
+    {
+        if (front == - 1)
+        /*If queue is initially empty */
+        front = 0;
+        printf("Inset the element in queue : ");
+        scanf("%d", &add_item);
+        rear = rear + 1;
+        queue_array[rear] = add_item;
+    }
+} /* End of insert() */
 
-		switch(choice) {
-			case 1:
-				enqueue(&front, &rear, arr);
-				break;
-			case 2:
-				dequeue(&front, &rear, arr);
-				break;
-			case 3:
-				display(&front, &rear, arr);
-				break;
-			case 4:
-				printf("quiting the program\n");
-				break;
-			default:
-				printf("invalid choice\n");
-				break;
-		}
-	}	
+void delete()
+{
+    if (front == - 1 || front > rear)
+    {
+        printf("Queue Underflow \n");
+        return ;
+    }
+    else
+    {
+        printf("Element deleted from queue is : %d\n", queue_array[front]);
+        front = front + 1;
+    }
+} /* End of delete() */
 
-	return 0;
-}
-
-
-void enqueue(int *f, int *r, int *arr) {
-	int element;
-	int front = *f, rear = *r;
-
-	printf("enter element: ");
-	scanf("%d", &element);
-
-	if(front == -1 && rear == -1) {
-		arr[0] = element;
-		front = 0;
-		rear = 0;
-	}
-	else if (rear == 99) {
-		printf("overflow\n");
-		return;
-	} 
-	else {
-		rear++;
-		arr[rear] = element;
-	}
-	
-	*f = front; *r = rear;	// to update in main variables 
-}
-
-void dequeue(int *f, int *r, int *arr) {
-	int front = *f, rear = *r;
-
-	if(front == -1 && rear == -1) {
-		printf("underflow\n");
-		return;
-	}
-	
-	printf("element deleted: %d\n", arr[front]);
-	if(front == rear) {
-		front = -1; 
-		rear = -1;
-	}
-	else {
-		front++;
-	}
-
-	*f = front; *r = rear; 	// to update in main variables
-}
-
-void display(int *f, int *r, int *arr) {
-	int i, front = *f, rear = *r;
-
-	if(front == -1 && rear == -1) {
-		printf("empty queue\n");
-		return;
-	}
-
-	printf("\nprinting elements: \n");
-	printf("front -> ");
-	for(i = front; i <= rear; i++)
-	{
-		printf("%d -> ", arr[i]);
-	}
-	printf("rear\n");
+void display()
+{
+    int i;
+    if (front == - 1)
+        printf("Queue is empty \n");
+    else
+    {
+        printf("Queue is : \n");
+        for (i = front; i <= rear; i++)
+            printf("%d ", queue_array[i]);
+        printf("\n");
+    }
 }
